@@ -38,7 +38,7 @@ This directory contains the AIS2DW12 component drivers.
 
 ### First release
 
-- First official release
+- First official release [ref. DS v2.0]
 
 ##
 
