@@ -69,13 +69,26 @@ This directory contains the AIS2DW12 component drivers.
 
 </div>
 
-<input type="checkbox" id="collapse-section4" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section4" aria-hidden="true">
 <label for="collapse-section4" aria-hidden="true">V2.0.1 / 19-Jun-2023</label>
 <div>
 
 ## Main changes
 
 - updated README.md file with tag reference and mdelay description
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section5" checked aria-hidden="true">
+<label for="collapse-section5" aria-hidden="true">V2.1.0 / 04-Jul-2025</label>
+<div>
+
+## Main changes
+
+- Fix driver formatting options
+- Added pointer to private data in stmdev_ctx_t
 
 ##
 
