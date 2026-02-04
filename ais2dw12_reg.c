@@ -1098,6 +1098,11 @@ int32_t ais2dw12_filter_bandwidth_set(const stmdev_ctx_t *ctx,
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL6, (uint8_t *) &reg, 1);
 
+  if (val == AIS2DW12_LPF1_ONLY)
+  {
+    reg.fds = 1;
+  }
+
   if (ret == 0)
   {
     reg.bw_filt = (uint8_t) val;
@@ -1123,28 +1128,38 @@ int32_t ais2dw12_filter_bandwidth_get(const stmdev_ctx_t *ctx,
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL6, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
 
   switch (reg.bw_filt)
   {
-    case AIS2DW12_ODR_DIV_2:
-      *val = AIS2DW12_ODR_DIV_2;
+    case 0x00:
+      if (reg.fds == 1)
+      {
+        *val = AIS2DW12_ODR_DIV_4;
+      }
+      else
+      {
+        *val = AIS2DW12_LPF1_ONLY;
+      }
       break;
 
-    case AIS2DW12_ODR_DIV_4:
+    case 0x01:
       *val = AIS2DW12_ODR_DIV_4;
       break;
 
-    case AIS2DW12_ODR_DIV_10:
+    case 0x02:
       *val = AIS2DW12_ODR_DIV_10;
       break;
 
-    case AIS2DW12_ODR_DIV_20:
+    case 0x03:
       *val = AIS2DW12_ODR_DIV_20;
       break;
 
     default:
-      *val = AIS2DW12_ODR_DIV_2;
+      *val = AIS2DW12_LPF1_ONLY;
       break;
   }
 

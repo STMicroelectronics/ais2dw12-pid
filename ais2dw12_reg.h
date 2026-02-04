@@ -736,7 +736,7 @@ int32_t ais2dw12_filter_path_get(const stmdev_ctx_t *ctx,
 
 typedef enum
 {
-  AIS2DW12_ODR_DIV_2     = 0,
+  AIS2DW12_LPF1_ONLY     = 0,
   AIS2DW12_ODR_DIV_4     = 1,
   AIS2DW12_ODR_DIV_10    = 2,
   AIS2DW12_ODR_DIV_20    = 3,
