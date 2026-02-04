@@ -815,11 +815,10 @@ int32_t ais2dw12_auto_increment_get(const stmdev_ctx_t *ctx, uint8_t *val)
   * @brief  Software reset. Restore the default values in user registers.[set]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      change the values of soft_reset in reg CTRL2
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t ais2dw12_reset_set(const stmdev_ctx_t *ctx, uint8_t val)
+int32_t ais2dw12_reset_set(const stmdev_ctx_t *ctx)
 {
   ais2dw12_ctrl2_t reg;
   int32_t ret;
@@ -828,7 +827,7 @@ int32_t ais2dw12_reset_set(const stmdev_ctx_t *ctx, uint8_t val)
 
   if (ret == 0)
   {
-    reg.soft_reset = val;
+    reg.soft_reset = PROPERTY_ENABLE;
     ret = ais2dw12_write_reg(ctx, AIS2DW12_CTRL2, (uint8_t *) &reg, 1);
   }
 
@@ -859,11 +858,10 @@ int32_t ais2dw12_reset_get(const stmdev_ctx_t *ctx, uint8_t *val)
   * @brief  Reboot memory content. Reload the calibration parameters.[set]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      change the values of boot in reg CTRL2
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t ais2dw12_boot_set(const stmdev_ctx_t *ctx, uint8_t val)
+int32_t ais2dw12_boot_set(const stmdev_ctx_t *ctx)
 {
   ais2dw12_ctrl2_t reg;
   int32_t ret;
@@ -872,7 +870,7 @@ int32_t ais2dw12_boot_set(const stmdev_ctx_t *ctx, uint8_t val)
 
   if (ret == 0)
   {
-    reg.boot = val;
+    reg.boot = PROPERTY_ENABLE;
     ret = ais2dw12_write_reg(ctx, AIS2DW12_CTRL2, (uint8_t *) &reg, 1);
   }
 
