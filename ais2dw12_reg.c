@@ -1982,15 +1982,9 @@ int32_t ais2dw12_act_mode_set(const stmdev_ctx_t *ctx,
   if (ret == 0)
   {
     wake_up_ths.sleep_on = (uint8_t) val & 0x01U;
-    ret = ais2dw12_write_reg(ctx, AIS2DW12_WAKE_UP_THS,
-                             (uint8_t *) &wake_up_ths, 1);
-  }
-
-  if (ret == 0)
-  {
     wake_up_dur.stationary = ((uint8_t)val & 0x02U) >> 1;
-    ret = ais2dw12_write_reg(ctx, AIS2DW12_WAKE_UP_DUR,
-                             (uint8_t *) &wake_up_dur, 1);
+    uint8_t buf[2] = {*(uint8_t *) &wake_up_ths, *(uint8_t *) &wake_up_dur};
+    ret = ais2dw12_write_reg(ctx, AIS2DW12_WAKE_UP_THS, buf, 2);
   }
 
   return ret;
