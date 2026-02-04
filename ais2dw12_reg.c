@@ -115,22 +115,22 @@ static void bytecpy(uint8_t *target, uint8_t *source)
 
 float_t ais2dw12_from_fs2_to_mg(int16_t lsb)
 {
-  return ((float_t)lsb) * 0.061f;
+  return ((float_t)lsb) * 0.244f;
 }
 
 float_t ais2dw12_from_fs4_to_mg(int16_t lsb)
 {
-  return ((float_t)lsb) * 0.122f;
+  return ((float_t)lsb) * 0.488f;
 }
 
-float_t ais2dw12_from_fs2_12bit_to_mg(int16_t lsb)
+float_t ais2dw12_from_fs2_pw1_to_mg(int16_t lsb)
 {
-  return ((float_t)lsb) * 0.061f;
+  return ((float_t)lsb) * 0.976f;
 }
 
-float_t ais2dw12_from_fs4_12bit_to_mg(int16_t lsb)
+float_t ais2dw12_from_fs4_pw1_to_mg(int16_t lsb)
 {
-  return ((float_t)lsb) * 0.122f;
+  return ((float_t)lsb) * 1.952f;
 }
 
 float_t ais2dw12_from_lsb_to_celsius(int16_t lsb)

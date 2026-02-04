@@ -603,8 +603,9 @@ int32_t ais2dw12_write_reg(const stmdev_ctx_t *ctx, uint8_t reg,
 
 float_t ais2dw12_from_fs2_to_mg(int16_t lsb);
 float_t ais2dw12_from_fs4_to_mg(int16_t lsb);
-float_t ais2dw12_from_fs2_12bit_to_mg(int16_t lsb);
-float_t ais2dw12_from_fs4_12bit_to_mg(int16_t lsb);
+
+float_t ais2dw12_from_fs2_pw1_to_mg(int16_t lsb);
+float_t ais2dw12_from_fs4_pw1_to_mg(int16_t lsb);
 
 float_t ais2dw12_from_lsb_to_celsius(int16_t lsb);
 
