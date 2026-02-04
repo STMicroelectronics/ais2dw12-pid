@@ -270,6 +270,10 @@ int32_t ais2dw12_data_rate_get(const stmdev_ctx_t *ctx, ais2dw12_odr_t *val)
         *val = AIS2DW12_XL_ODR_OFF;
         break;
 
+      case AIS2DW12_XL_ODR_1Hz6:
+        *val = AIS2DW12_XL_ODR_1Hz6;
+        break;
+
       case AIS2DW12_XL_ODR_12Hz5:
         *val = AIS2DW12_XL_ODR_12Hz5;
         break;
