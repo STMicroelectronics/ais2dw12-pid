@@ -611,14 +611,14 @@ float_t ais2dw12_from_lsb_to_celsius(int16_t lsb);
 
 typedef enum
 {
-  AIS2DW12_PWR_MD_4                           = 0x03,
-  AIS2DW12_PWR_MD_3                           = 0x02,
-  AIS2DW12_PWR_MD_2                           = 0x01,
-  AIS2DW12_PWR_MD_12bit                       = 0x00,
-  AIS2DW12_SINGLE_PWR_MD_4                    = 0x0B,
-  AIS2DW12_SINGLE_PWR_MD_3                    = 0x0A,
-  AIS2DW12_SINGLE_PWR_MD_2                    = 0x09,
-  AIS2DW12_SINGLE_PWR_MD_12bit                = 0x08,
+  AIS2DW12_CONT_PWR_4                          = 0x03,
+  AIS2DW12_CONT_PWR_3                          = 0x02,
+  AIS2DW12_CONT_PWR_2                          = 0x01,
+  AIS2DW12_CONT_PWR_12bit                      = 0x00,
+  AIS2DW12_SINGLE_PWR_4                        = 0x0B,
+  AIS2DW12_SINGLE_PWR_3                        = 0x0A,
+  AIS2DW12_SINGLE_PWR_2                        = 0x09,
+  AIS2DW12_SINGLE_PWR_12bit                    = 0x08,
 } ais2dw12_mode_t;
 int32_t ais2dw12_power_mode_set(const stmdev_ctx_t *ctx,
                                 ais2dw12_mode_t val);

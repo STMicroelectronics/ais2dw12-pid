@@ -156,7 +156,6 @@ float_t ais2dw12_from_lsb_to_celsius(int16_t lsb)
   *
   * @param  ctx      read / write interface definitions
   * @param  val      change the values of op_mode / pw_mode in reg CTRL1
-  *                  and low_noise in reg CTRL6
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -170,8 +169,8 @@ int32_t ais2dw12_power_mode_set(const stmdev_ctx_t *ctx,
 
   if (ret == 0)
   {
-    ctrl1.op_mode = ((uint8_t) val & 0x0CU) >> 2;
-    ctrl1.pw_mode = (uint8_t) val & 0x03U ;
+    ctrl1.pw_mode = ((uint8_t) val & 0x0CU) >> 2;
+    ctrl1.op_mode = (uint8_t) val & 0x03U;
     ret = ais2dw12_write_reg(ctx, AIS2DW12_CTRL1, (uint8_t *) &ctrl1, 1);
   }
 
@@ -183,7 +182,6 @@ int32_t ais2dw12_power_mode_set(const stmdev_ctx_t *ctx,
   *
   * @param  ctx      read / write interface definitions
   * @param  val      change the values of op_mode / pw_mode in reg CTRL1
-  *                  and low_noise in reg CTRL6
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -194,45 +192,36 @@ int32_t ais2dw12_power_mode_get(const stmdev_ctx_t *ctx,
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL1, (uint8_t *) &ctrl1, 1);
-  if (ret != 0) { return ret; }
 
-  switch ((ctrl1.op_mode << 2) + ctrl1.pw_mode)
+  if (ret == 0)
   {
-    case AIS2DW12_PWR_MD_4:
-      *val = AIS2DW12_PWR_MD_4;
-      break;
-
-    case AIS2DW12_PWR_MD_3:
-      *val = AIS2DW12_PWR_MD_3;
-      break;
-
-    case AIS2DW12_PWR_MD_2:
-      *val = AIS2DW12_PWR_MD_2;
-      break;
-
-    case AIS2DW12_PWR_MD_12bit:
-      *val = AIS2DW12_PWR_MD_12bit;
-      break;
-
-    case AIS2DW12_SINGLE_PWR_MD_4:
-      *val = AIS2DW12_SINGLE_PWR_MD_4;
-      break;
-
-    case AIS2DW12_SINGLE_PWR_MD_3:
-      *val = AIS2DW12_SINGLE_PWR_MD_3;
-      break;
-
-    case AIS2DW12_SINGLE_PWR_MD_2:
-      *val = AIS2DW12_SINGLE_PWR_MD_2;
-      break;
-
-    case AIS2DW12_SINGLE_PWR_MD_12bit:
-      *val = AIS2DW12_SINGLE_PWR_MD_12bit;
-      break;
-
-    default:
-      *val = AIS2DW12_PWR_MD_4;
-      break;
+    switch (((ctrl1.op_mode << 2) + ctrl1.pw_mode))
+    {
+      case 0x00:
+        *val = AIS2DW12_CONT_PWR_12bit;
+        break;
+      case 0x01:
+        *val = AIS2DW12_CONT_PWR_2;
+        break;
+      case 0x02:
+        *val = AIS2DW12_CONT_PWR_3;
+        break;
+      case 0x03:
+        *val = AIS2DW12_CONT_PWR_4;
+        break;
+      case 0x08:
+        *val = AIS2DW12_SINGLE_PWR_12bit;
+        break;
+      case 0x09:
+        *val = AIS2DW12_SINGLE_PWR_2;
+        break;
+      case 0x0A:
+        *val = AIS2DW12_SINGLE_PWR_3;
+        break;
+      case 0x0B:
+        *val = AIS2DW12_SINGLE_PWR_4;
+        break;
+    }
   }
 
   return ret;
