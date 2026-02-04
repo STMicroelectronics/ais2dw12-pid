@@ -1597,19 +1597,20 @@ int32_t ais2dw12_pin_mode_get(const stmdev_ctx_t *ctx,
   * @brief  Select the signal that need to route on int1 pad.[set]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      register CTRL4_INT1_PAD_CTRL.
+  * @param  val      register CTRL4_INT1.
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
 int32_t ais2dw12_pin_int1_route_set(const stmdev_ctx_t *ctx,
                                     ais2dw12_ctrl4_int1_t *val)
 {
-  ais2dw12_ctrl5_int2_t ctrl5_int2_pad_ctrl;
+
+  ais2dw12_ctrl5_int2_t ctrl5_int2;
   ais2dw12_ctrl7_t reg;
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL5_INT2,
-                          (uint8_t *)&ctrl5_int2_pad_ctrl, 1);
+                          (uint8_t *) &ctrl5_int2, 1);
 
   if (ret == 0)
   {
@@ -1618,11 +1619,12 @@ int32_t ais2dw12_pin_int1_route_set(const stmdev_ctx_t *ctx,
 
   if (ret == 0)
   {
-    if ((val->int1_ff |
-         val->int1_wu |
-         val->int1_6d |
-         ctrl5_int2_pad_ctrl.int2_sleep_state |
-         ctrl5_int2_pad_ctrl.int2_sleep_chg) != PROPERTY_DISABLE)
+    // `interrupts_enable` is set to ENABLE when at least one of the int1/int2 events is active
+    if ((ctrl5_int2.int2_sleep_state
+         | ctrl5_int2.int2_sleep_chg
+         | val->int1_ff
+         | val->int1_wu
+         | val->int1_6d) != PROPERTY_DISABLE)
     {
       reg.interrupts_enable = PROPERTY_ENABLE;
     }
@@ -1648,7 +1650,7 @@ int32_t ais2dw12_pin_int1_route_set(const stmdev_ctx_t *ctx,
   * @brief  Select the signal that need to route on int1 pad.[get]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      register CTRL4_INT1_PAD_CTRL.
+  * @param  val      register CTRL4_INT1.
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -1667,38 +1669,40 @@ int32_t ais2dw12_pin_int1_route_get(const stmdev_ctx_t *ctx,
   * @brief   Select the signal that need to route on int2 pad.[set]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      register CTRL5_INT2_PAD_CTRL.
+  * @param  val      register CTRL5_INT2.
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
 int32_t ais2dw12_pin_int2_route_set(const stmdev_ctx_t *ctx,
                                     ais2dw12_ctrl5_int2_t *val)
 {
-  ais2dw12_ctrl4_int1_t ctrl4_int1_pad_ctrl;
-  ais2dw12_ctrl7_t reg;
+  ais2dw12_ctrl7_t ctrl_reg7;
+  ais2dw12_ctrl4_int1_t  ctrl4_int1;
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL4_INT1,
-                          (uint8_t *) &ctrl4_int1_pad_ctrl, 1);
+                          (uint8_t *)&ctrl4_int1, 1);
 
   if (ret == 0)
   {
-    ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL7, (uint8_t *) &reg, 1);
+    ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL7, (uint8_t *) &ctrl_reg7, 1);
   }
 
   if (ret == 0)
   {
-    if ((ctrl4_int1_pad_ctrl.int1_ff |
-         ctrl4_int1_pad_ctrl.int1_wu |
-         ctrl4_int1_pad_ctrl.int1_6d |
-         val->int2_sleep_state | val->int2_sleep_chg) != PROPERTY_DISABLE)
+    // `interrupts_enable` is set to ENABLE when at least one of the int1/int2 events is active
+    if ((val->int2_sleep_state
+         | val->int2_sleep_chg
+         | ctrl4_int1.int1_ff
+         | ctrl4_int1.int1_wu
+         | ctrl4_int1.int1_6d) != PROPERTY_DISABLE)
     {
-      reg.interrupts_enable = PROPERTY_ENABLE;
+      ctrl_reg7.interrupts_enable = PROPERTY_ENABLE;
     }
 
     else
     {
-      reg.interrupts_enable = PROPERTY_DISABLE;
+      ctrl_reg7.interrupts_enable = PROPERTY_DISABLE;
     }
 
     ret = ais2dw12_write_reg(ctx, AIS2DW12_CTRL5_INT2,
@@ -1707,7 +1711,7 @@ int32_t ais2dw12_pin_int2_route_set(const stmdev_ctx_t *ctx,
 
   if (ret == 0)
   {
-    ret = ais2dw12_write_reg(ctx, AIS2DW12_CTRL7, (uint8_t *) &reg, 1);
+    ret = ais2dw12_write_reg(ctx, AIS2DW12_CTRL7, (uint8_t *) &ctrl_reg7, 1);
   }
 
   return ret;
@@ -1717,7 +1721,7 @@ int32_t ais2dw12_pin_int2_route_set(const stmdev_ctx_t *ctx,
   * @brief  Select the signal that need to route on int2 pad.[get]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      register CTRL5_INT2_PAD_CTRL
+  * @param  val      register CTRL5_INT2
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
