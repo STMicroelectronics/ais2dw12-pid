@@ -97,11 +97,6 @@ typedef struct
 #endif /* DRV_BYTE_ORDER */
 } bitwise_t;
 
-/**
-  * @}
-  *
-  */
-
 #define PROPERTY_DISABLE                (0U)
 #define PROPERTY_ENABLE                 (1U)
 
@@ -201,7 +196,7 @@ typedef struct
   uint8_t odr                        : 4;
   uint8_t op_mode                    : 2;
   uint8_t pw_mode                    : 2;
-#endif /* DRV_BYTE_ORDER*/
+#endif /* DRV_BYTE_ORDER */
 } ais2dw12_ctrl1_t;
 
 #define AIS2DW12_CTRL2                       0x21U
@@ -373,13 +368,13 @@ typedef struct
 typedef struct
 {
 #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
-  uint8_t not_used_01                 : 5;
-  uint8_t _6d_ths                     : 2;
-  uint8_t _4d_en                      : 1;
+  uint8_t not_used_01                : 5;
+  uint8_t _6d_ths                    : 2;
+  uint8_t _4d_en                     : 1;
 #elif DRV_BYTE_ORDER == DRV_BIG_ENDIAN
-  uint8_t _4d_en                      : 1;
-  uint8_t _6d_ths                     : 2;
-  uint8_t not_used_01                 : 5;
+  uint8_t _4d_en                     : 1;
+  uint8_t _6d_ths                    : 2;
+  uint8_t not_used_01                : 5;
 #endif /* DRV_BYTE_ORDER */
 } ais2dw12_sixd_ths_t;
 
@@ -499,15 +494,15 @@ typedef struct
 #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
   uint8_t ff_ia                      : 1;
   uint8_t wu_ia                      : 1;
-  uint8_t not_used_01                : 2;
+  uint8_t not_used_02                : 2;
   uint8_t _6d_ia                     : 1;
   uint8_t sleep_change_ia            : 1;
-  uint8_t not_used_02                : 2;
+  uint8_t not_used_01                : 2;
 #elif DRV_BYTE_ORDER == DRV_BIG_ENDIAN
-  uint8_t not_used_02                : 2;
+  uint8_t not_used_01                : 2;
   uint8_t sleep_change_ia            : 1;
   uint8_t _6d_ia                     : 1;
-  uint8_t not_used_01                : 2;
+  uint8_t not_used_02                : 2;
   uint8_t wu_ia                      : 1;
   uint8_t ff_ia                      : 1;
 #endif /* DRV_BYTE_ORDER */

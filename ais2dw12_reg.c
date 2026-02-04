@@ -51,7 +51,10 @@ int32_t __weak ais2dw12_read_reg(const stmdev_ctx_t *ctx, uint8_t reg,
 {
   int32_t ret;
 
-  if (ctx == NULL) return -1;
+  if (ctx == NULL)
+  {
+    return -1;
+  }
 
   ret = ctx->read_reg(ctx->handle, reg, data, len);
 
@@ -74,7 +77,10 @@ int32_t __weak ais2dw12_write_reg(const stmdev_ctx_t *ctx, uint8_t reg,
 {
   int32_t ret;
 
-  if (ctx == NULL) return -1;
+  if (ctx == NULL)
+  {
+    return -1;
+  }
 
   ret = ctx->write_reg(ctx->handle, reg, data, len);
 
@@ -258,12 +264,13 @@ int32_t ais2dw12_data_rate_get(const stmdev_ctx_t *ctx, ais2dw12_odr_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL1, (uint8_t *) &ctrl1, 1);
-
   if (ret == 0)
   {
     ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL3, (uint8_t *) &ctrl3, 1);
-    if (ret != 0) { return ret; }
+  }
 
+  if (ret == 0)
+  {
     switch ((ctrl3.slp_mode << 4) + ctrl1.odr)
     {
       case AIS2DW12_XL_ODR_OFF:
@@ -346,8 +353,10 @@ int32_t ais2dw12_block_data_update_get(const stmdev_ctx_t *ctx,
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL2, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
-  *val = reg.bdu;
+  if (ret == 0)
+  {
+    *val = reg.bdu;
+  }
 
   return ret;
 }
@@ -390,7 +399,6 @@ int32_t ais2dw12_full_scale_get(const stmdev_ctx_t *ctx, ais2dw12_fs_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL6, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
 
   switch (reg.fs)
   {
@@ -442,8 +450,10 @@ int32_t ais2dw12_flag_data_ready_get(const stmdev_ctx_t *ctx, uint8_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_STATUS, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
-  *val = reg.drdy;
+  if (ret == 0)
+  {
+    *val = reg.drdy;
+  }
 
   return ret;
 }
@@ -623,21 +633,23 @@ int32_t ais2dw12_offset_weight_get(const stmdev_ctx_t *ctx,
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL7, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
 
-  switch (reg.usr_off_w)
+  if (ret == 0)
   {
-    case AIS2DW12_LSb_977ug:
-      *val = AIS2DW12_LSb_977ug;
-      break;
+    switch (reg.usr_off_w)
+    {
+      case AIS2DW12_LSb_977ug:
+        *val = AIS2DW12_LSb_977ug;
+        break;
 
-    case AIS2DW12_LSb_15mg6:
-      *val = AIS2DW12_LSb_15mg6;
-      break;
+      case AIS2DW12_LSb_15mg6:
+        *val = AIS2DW12_LSb_15mg6;
+        break;
 
-    default:
-      *val = AIS2DW12_LSb_977ug;
-      break;
+      default:
+        *val = AIS2DW12_LSb_977ug;
+        break;
+    }
   }
 
   return ret;
@@ -660,7 +672,7 @@ int32_t ais2dw12_offset_weight_get(const stmdev_ctx_t *ctx,
   *         together express a 16-bit word in two's complement.[get]
   *
   * @param  ctx      read / write interface definitions
-  * @param  buff     buffer that stores data read
+  * @param  val      buffer that stores data read
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -670,9 +682,11 @@ int32_t ais2dw12_temperature_raw_get(const stmdev_ctx_t *ctx, int16_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_OUT_T_L, buff, 2);
-  if (ret != 0) { return ret; }
-  *val = (int16_t)buff[1];
-  *val = (*val * 256) + (int16_t)buff[0];
+  if (ret == 0)
+  {
+    *val = (int16_t)buff[1];
+    *val = (*val * 256) + (int16_t)buff[0];
+  }
 
   return ret;
 }
@@ -682,7 +696,7 @@ int32_t ais2dw12_temperature_raw_get(const stmdev_ctx_t *ctx, int16_t *val)
   *         a 16-bit word in two's complement.[get]
   *
   * @param  ctx      read / write interface definitions
-  * @param  buff     buffer that stores data read
+  * @param  val      buffer that stores data read
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -692,7 +706,11 @@ int32_t ais2dw12_acceleration_raw_get(const stmdev_ctx_t *ctx, int16_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_OUT_X_L, buff, 6);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
+
   val[0] = (int16_t)buff[1];
   val[0] = (val[0] * 256) + (int16_t)buff[0];
   val[1] = (int16_t)buff[3];
@@ -772,7 +790,11 @@ int32_t ais2dw12_auto_increment_get(const stmdev_ctx_t *ctx, uint8_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL2, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
+
   *val = reg.if_add_inc;
 
   return ret;
@@ -815,7 +837,11 @@ int32_t ais2dw12_reset_get(const stmdev_ctx_t *ctx, uint8_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL2, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
+
   *val = reg.soft_reset;
 
   return ret;
@@ -858,7 +884,11 @@ int32_t ais2dw12_boot_get(const stmdev_ctx_t *ctx, uint8_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL2, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
+
   *val = reg.boot;
 
   return ret;
@@ -902,7 +932,10 @@ int32_t ais2dw12_self_test_get(const stmdev_ctx_t *ctx, ais2dw12_st_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL3, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
 
   switch (reg.st)
   {
@@ -966,7 +999,10 @@ int32_t ais2dw12_data_ready_mode_get(const stmdev_ctx_t *ctx,
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL7, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
 
   switch (reg.drdy_pulsed)
   {
@@ -1052,12 +1088,13 @@ int32_t ais2dw12_filter_path_get(const stmdev_ctx_t *ctx,
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL6, (uint8_t *) &ctrl6, 1);
-
   if (ret == 0)
   {
     ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL7, (uint8_t *) &ctrl_reg7, 1);
-    if (ret != 0) { return ret; }
+  }
 
+  if (ret == 0)
+  {
     switch ((ctrl6.fds << 4) + ctrl_reg7.usr_off_on_out)
     {
       case AIS2DW12_LPF_ON_OUT:
@@ -1204,7 +1241,11 @@ int32_t ais2dw12_reference_mode_get(const stmdev_ctx_t *ctx, uint8_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL7, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
+
   *val = reg.hp_ref_mode;
 
   return ret;
@@ -1261,7 +1302,10 @@ int32_t ais2dw12_spi_mode_get(const stmdev_ctx_t *ctx, ais2dw12_sim_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL2, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
 
   switch (reg.sim)
   {
@@ -1322,7 +1366,10 @@ int32_t ais2dw12_i2c_interface_get(const stmdev_ctx_t *ctx,
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL2, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
 
   switch (reg.i2c_disable)
   {
@@ -1382,7 +1429,10 @@ int32_t ais2dw12_cs_mode_get(const stmdev_ctx_t *ctx,
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL2, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
 
   switch (reg.cs_pu_disc)
   {
@@ -1454,7 +1504,10 @@ int32_t ais2dw12_pin_polarity_get(const stmdev_ctx_t *ctx,
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL3, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
 
   switch (reg.h_lactive)
   {
@@ -1514,7 +1567,10 @@ int32_t ais2dw12_int_notification_get(const stmdev_ctx_t *ctx,
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL3, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
 
   switch (reg.lir)
   {
@@ -1573,7 +1629,10 @@ int32_t ais2dw12_pin_mode_get(const stmdev_ctx_t *ctx,
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL3, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
 
   switch (reg.pp_od)
   {
@@ -1773,7 +1832,11 @@ int32_t ais2dw12_all_on_int1_get(const stmdev_ctx_t *ctx, uint8_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL7, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
+
   *val = reg.int2_on_int1;
 
   return ret;
@@ -1830,7 +1893,11 @@ int32_t ais2dw12_wkup_threshold_get(const stmdev_ctx_t *ctx, uint8_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_WAKE_UP_THS, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
+
   *val = reg.wk_ths;
 
   return ret;
@@ -1874,7 +1941,11 @@ int32_t ais2dw12_wkup_dur_get(const stmdev_ctx_t *ctx, uint8_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_WAKE_UP_DUR, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
+
   *val = reg.wake_dur;
 
   return ret;
@@ -1920,7 +1991,10 @@ int32_t ais2dw12_wkup_feed_data_get(const stmdev_ctx_t *ctx,
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL7, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
 
   switch (reg.usr_off_on_wu)
   {
@@ -2008,13 +2082,13 @@ int32_t ais2dw12_act_mode_get(const stmdev_ctx_t *ctx,
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_WAKE_UP_THS,
                           (uint8_t *) &wake_up_ths, 1);
-
   if (ret == 0)
   {
     ret = ais2dw12_read_reg(ctx, AIS2DW12_WAKE_UP_DUR,
                             (uint8_t *) &wake_up_dur, 1);
-    if (ret != 0) { return ret; }
-
+  }
+  if (ret == 0)
+  {
     switch ((wake_up_dur.stationary << 1) + wake_up_ths.sleep_on)
     {
       case AIS2DW12_NO_DETECTION:
@@ -2076,8 +2150,10 @@ int32_t ais2dw12_act_sleep_dur_get(const stmdev_ctx_t *ctx, uint8_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_WAKE_UP_DUR, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
-  *val = reg.sleep_dur;
+  if (ret == 0)
+  {
+    *val = reg.sleep_dur;
+  }
 
   return ret;
 }
@@ -2133,7 +2209,12 @@ int32_t ais2dw12_6d_threshold_get(const stmdev_ctx_t *ctx, uint8_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_SIXD_THS, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+
+  if (ret != 0)
+  {
+    return ret;
+  }
+
   *val = reg._6d_ths;
 
   return ret;
@@ -2177,7 +2258,11 @@ int32_t ais2dw12_4d_mode_get(const stmdev_ctx_t *ctx, uint8_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_SIXD_THS, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
+
   *val = reg._4d_en;
 
   return ret;
@@ -2240,7 +2325,10 @@ int32_t ais2dw12_6d_feed_data_get(const stmdev_ctx_t *ctx,
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_CTRL7, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
 
   switch (reg.lpass_on6d)
   {
@@ -2331,11 +2419,13 @@ int32_t ais2dw12_ff_dur_get(const stmdev_ctx_t *ctx, uint8_t *val)
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_WAKE_UP_DUR,
                           (uint8_t *) &wake_up_dur, 1);
-
   if (ret == 0)
   {
     ret = ais2dw12_read_reg(ctx, AIS2DW12_FREE_FALL,
                             (uint8_t *) &free_fall, 1);
+  }
+  if (ret == 0)
+  {
     *val = (wake_up_dur.ff_dur << 5) + free_fall.ff_dur;
   }
 
@@ -2382,7 +2472,10 @@ int32_t ais2dw12_ff_threshold_get(const stmdev_ctx_t *ctx,
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_FREE_FALL, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
 
   switch (reg.ff_ths)
   {
@@ -2476,7 +2569,11 @@ int32_t ais2dw12_fifo_watermark_get(const stmdev_ctx_t *ctx, uint8_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_FIFO_CTRL, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
+
   *val = reg.fth;
 
   return ret;
@@ -2522,7 +2619,10 @@ int32_t ais2dw12_fifo_mode_get(const stmdev_ctx_t *ctx,
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_FIFO_CTRL, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
 
   switch (reg.fmode)
   {
@@ -2568,7 +2668,11 @@ int32_t ais2dw12_fifo_data_level_get(const stmdev_ctx_t *ctx, uint8_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_FIFO_SAMPLES, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
+
   *val = reg.diff;
 
   return ret;
@@ -2587,7 +2691,11 @@ int32_t ais2dw12_fifo_ovr_flag_get(const stmdev_ctx_t *ctx, uint8_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_FIFO_SAMPLES, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
+
   *val = reg.fifo_ovr;
 
   return ret;
@@ -2606,17 +2714,15 @@ int32_t ais2dw12_fifo_wtm_flag_get(const stmdev_ctx_t *ctx, uint8_t *val)
   int32_t ret;
 
   ret = ais2dw12_read_reg(ctx, AIS2DW12_FIFO_SAMPLES, (uint8_t *) &reg, 1);
-  if (ret != 0) { return ret; }
+  if (ret != 0)
+  {
+    return ret;
+  }
+
   *val = reg.fifo_fth;
 
   return ret;
 }
-
-/**
-  * @}
-  *
-  */
-
 /**
   * @}
   *
