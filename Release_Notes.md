@@ -30,7 +30,28 @@ This directory contains the AIS2DW12 component drivers.
 # Update history
 
 ::: {.collapse}
-<input type="checkbox" id="collapse-section6" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section7" checked aria-hidden="true">
+<label for="collapse-section7" aria-hidden="true">V2.3.0 / 05-Mar-2026</label>
+<div>
+
+## Main changes
+
+- Re-order update history with most updated on top
+- Fix style
+- Fix act_mode_set API
+- Fix CTRL4_INT1 and CTRL5_INT2 names
+- Add LPF1_ONLY variant for bw_filt_t, fix filter_bandwidth APIs
+- Fix data_rate_get API, missing 1.6Hz entry handling
+- Remove bytecopy function and update all_sources_get API
+- Align mode_t enum to datasheet
+- Fix Sensitivity conversion values
+- Remove parameter from boot_set/reset_set APIs
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section6" aria-hidden="true">
 <label for="collapse-section6" aria-hidden="true">V2.2.0 / 07-Oct-2025</label>
 <div>
 
@@ -42,6 +63,7 @@ This directory contains the AIS2DW12 component drivers.
 ##
 
 </div>
+
 <input type="checkbox" id="collapse-section5" aria-hidden="true">
 <label for="collapse-section5" aria-hidden="true">V2.1.0 / 04-Jul-2025</label>
 <div>
