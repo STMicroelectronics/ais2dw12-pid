@@ -30,7 +30,19 @@ This directory contains the AIS2DW12 component drivers.
 # Update history
 
 ::: {.collapse}
-<input type="checkbox" id="collapse-section7" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section8" checked aria-hidden="true">
+<label for="collapse-section8" aria-hidden="true">V2.3.1 / 18-Mar-2026</label>
+<div>
+
+## Main changes
+
+- Change switch cases to raw uint8_t values
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section7" aria-hidden="true">
 <label for="collapse-section7" aria-hidden="true">V2.3.0 / 05-Mar-2026</label>
 <div>
 
