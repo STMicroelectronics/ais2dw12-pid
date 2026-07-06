@@ -155,8 +155,8 @@ int32_t ais2dw12_power_mode_set(const stmdev_ctx_t *ctx,
 
   if (ret == 0)
   {
-    ctrl1.pw_mode = ((uint8_t) val & 0x0CU) >> 2;
-    ctrl1.op_mode = (uint8_t) val & 0x03U;
+    ctrl1.op_mode = ((uint8_t) val & 0x0CU) >> 2;
+    ctrl1.pw_mode = (uint8_t) val & 0x03U;
     ret = ais2dw12_write_reg(ctx, AIS2DW12_CTRL1, (uint8_t *) &ctrl1, 1);
   }
 
